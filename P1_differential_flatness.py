@@ -33,7 +33,7 @@ def compute_traj_coeffs(initial_state, final_state, tf):
     Hint: Use the np.linalg.solve function.
     """
     ########## Code starts here ##########
-
+    coeffs = 0
     ########## Code ends here ##########
     return coeffs
 
@@ -64,7 +64,8 @@ def compute_controls(traj):
         om (np.array shape [N]) om at each point of traj
     """
     ########## Code starts here ##########
-
+    V = 0
+    om = 0
     ########## Code ends here ##########
 
     return V, om
@@ -83,7 +84,7 @@ def compute_arc_length(V, t):
     """
     s = None
     ########## Code starts here ##########
-
+    s = 0
     ########## Code ends here ##########
     return s
 
@@ -104,7 +105,7 @@ def rescale_V(V, om, V_max, om_max):
     Hint: This should only take one or two lines.
     """
     ########## Code starts here ##########
-
+    V_tilde = 0
     ########## Code ends here ##########
     return V_tilde
 
@@ -121,7 +122,7 @@ def compute_tau(V_tilde, s):
     Hint: Use the function cumtrapz. This should take one line.
     """
     ########## Code starts here ##########
-
+    tau = 0
     ########## Code ends here ##########
     return tau
 
@@ -138,7 +139,7 @@ def rescale_om(V, om, V_tilde):
     Hint: This should take one line.
     """
     ########## Code starts here ##########
-
+    om_tilde = 0
     ########## Code ends here ##########
     return om_tilde
 
