@@ -33,7 +33,21 @@ def compute_traj_coeffs(initial_state, final_state, tf):
     Hint: Use the np.linalg.solve function.
     """
     ########## Code starts here ##########
-    coeffs = 0
+    
+    coeffs = np.array shape [8]
+    A = [ 
+            [1 0 0 0 0 0 0 0];
+            [0 0 0 0 1 0 0 0];
+			[1 tf tf^2 tf^3 0 0 0 0];
+			[0 0 0 0 1 tf tf^2 tf^3];
+			[0 1 0 0 0 0 0 0];
+			[0 0 0 0 1 0 0 0];
+			[0 1 2*tf 3*tf^2 0 0 0 0];
+			[0 0 0 0 2*tf 3*tf^2]
+        ]
+    b = [initial_state
+            
+    
     ########## Code ends here ##########
     return coeffs
 
