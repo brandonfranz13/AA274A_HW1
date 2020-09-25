@@ -76,14 +76,14 @@ def compute_traj(coeffs, tf, N):
     ########## Code starts here ##########
     
     x1, x2, x3, x4, y1, y2, y3, y4 = coeffs
-    traj[:,0] = x1 + x2 * t + x3 * t**2 + x4 * t**3 #x
-    traj[:,1] = y1 + y2 * t + y3 * t**2 + y4 * t**3 #y
-    traj[:,3] = x2 + x3 * 2 * t + x4 * 3 * t**2    #xdot
-    traj[:,4] = y2 + y3 * 2 * t + y4 * 3 * t**2    #ydot
+    traj[:,0] = x1 + x2 * t + x3 * t**2 + x4 * t**3  #x
+    traj[:,1] = y1 + y2 * t + y3 * t**2 + y4 * t**3  #y
+    traj[:,3] = x2 + x3 * 2 * t + x4 * 3 * t**2      #xdot
+    traj[:,4] = y2 + y3 * 2 * t + y4 * 3 * t**2      #ydot
     V = np.sqrt(traj[:,3]**2 + traj[:,4]**2)
-    traj[:,2] = np.arctan2(traj[:,4], traj[:,3] * V)
-    traj[:,5] = x3 * 2 + x4 * 6 * t
-    traj[:,6] = y3 * 2 + y4 * 6 * t
+    traj[:,2] = np.arctan2(traj[:,4], traj[:,3] * V) #theta
+    traj[:,5] = x3 * 2 + x4 * 6 * t                  #xddot
+    traj[:,6] = y3 * 2 + y4 * 6 * t                  #yddot   
     
     ########## Code ends here ##########
 
@@ -98,8 +98,11 @@ def compute_controls(traj):
         om (np.array shape [N]) om at each point of traj
     """
     ########## Code starts here ##########
-    V = 0
-    om = 0
+    V = np.sqrt(traj[:,3]**2 + traj[:,4]**2)
+    Vdot = (traj[:,3] + traj[:,4]) / np.sqrt(traj[:,3]**2 + traj[:,4]**2)
+    x = traj[:,4] / (traj[:,3] * V)
+    dxdt = ( (traj[:,6] * traj[:,3] * V) - (traj[:,4] * V * traj[:,5]) - (traj[:,4] * traj[:,3] * Vdot) ) / (traj[:,3]**2 * V**2)
+    om = 1 / (1 + (x) ** 2) * dxdt
     ########## Code ends here ##########
 
     return V, om
@@ -118,7 +121,7 @@ def compute_arc_length(V, t):
     """
     s = None
     ########## Code starts here ##########
-    s = 0
+    
     ########## Code ends here ##########
     return s
 
@@ -139,7 +142,7 @@ def rescale_V(V, om, V_max, om_max):
     Hint: This should only take one or two lines.
     """
     ########## Code starts here ##########
-    V_tilde = 0
+    
     ########## Code ends here ##########
     return V_tilde
 
@@ -156,7 +159,7 @@ def compute_tau(V_tilde, s):
     Hint: Use the function cumtrapz. This should take one line.
     """
     ########## Code starts here ##########
-    tau = 0
+    
     ########## Code ends here ##########
     return tau
 
@@ -173,7 +176,7 @@ def rescale_om(V, om, V_tilde):
     Hint: This should take one line.
     """
     ########## Code starts here ##########
-    om_tilde = 0
+    
     ########## Code ends here ##########
     return om_tilde
 
@@ -247,23 +250,23 @@ if __name__ == "__main__":
 
     coeffs = compute_traj_coeffs(initial_state=s_0, final_state=s_f, tf=tf)
     t, traj = compute_traj(coeffs=coeffs, tf=tf, N=N)
-    # V,om = compute_controls(traj=traj)
+    V,om = compute_controls(traj=traj)
 
-    # part_b_complete = False
-    # s = compute_arc_length(V, t)
-    # if s is not None:
-        # part_b_complete = True
-        # V_tilde = rescale_V(V, om, V_max, om_max)
-        # tau = compute_tau(V_tilde, s)
-        # om_tilde = rescale_om(V, om, V_tilde)
+    part_b_complete = False
+    s = compute_arc_length(V, t)
+    if s is not None:
+        part_b_complete = True
+        V_tilde = rescale_V(V, om, V_max, om_max)
+        tau = compute_tau(V_tilde, s)
+        om_tilde = rescale_om(V, om, V_tilde)
 
-        # t_new, V_scaled, om_scaled, traj_scaled = interpolate_traj(traj, tau, V_tilde, om_tilde, dt, s_f)
+        t_new, V_scaled, om_scaled, traj_scaled = interpolate_traj(traj, tau, V_tilde, om_tilde, dt, s_f)
 
-        # # Save trajectory data
-        # data = {'z': traj_scaled, 'V': V_scaled, 'om': om_scaled}
-        # save_dict(data, "data/differential_flatness.pkl")
+        # Save trajectory data
+        data = {'z': traj_scaled, 'V': V_scaled, 'om': om_scaled}
+        save_dict(data, "data/differential_flatness.pkl")
 
-    # maybe_makedirs('plots')
+    maybe_makedirs('plots')
 
     # Plots
     plt.figure(figsize=(15, 7))
@@ -277,42 +280,42 @@ if __name__ == "__main__":
     plt.title("Path (position)")
     plt.axis([-1, 6, -1, 6])
 
-    # ax = plt.subplot(2, 2, 2)
-    # plt.plot(t, V, linewidth=2)
-    # plt.plot(t, om, linewidth=2)
-    # plt.grid(True)
-    # plt.xlabel('Time [s]')
-    # plt.legend(['V [m/s]', '$\omega$ [rad/s]'], loc="best")
-    # plt.title('Original Control Input')
-    # plt.tight_layout()
+    ax = plt.subplot(2, 2, 2)
+    plt.plot(t, V, linewidth=2)
+    plt.plot(t, om, linewidth=2)
+    plt.grid(True)
+    plt.xlabel('Time [s]')
+    plt.legend(['V [m/s]', '$\omega$ [rad/s]'], loc="best")
+    plt.title('Original Control Input')
+    plt.tight_layout()
 
-    # plt.subplot(2, 2, 4, sharex=ax)
-    # if part_b_complete:
-        # plt.plot(t_new, V_scaled, linewidth=2)
-        # plt.plot(t_new, om_scaled, linewidth=2)
-        # plt.legend(['V [m/s]', '$\omega$ [rad/s]'], loc="best")
-        # plt.grid(True)
-    # else:
-        # plt.text(0.5,0.5,"[Problem iv not completed]", horizontalalignment='center', verticalalignment='center', transform=plt.gca().transAxes)
-    # plt.xlabel('Time [s]')
-    # plt.title('Scaled Control Input')
-    # plt.tight_layout()
+    plt.subplot(2, 2, 4, sharex=ax)
+    if part_b_complete:
+        plt.plot(t_new, V_scaled, linewidth=2)
+        plt.plot(t_new, om_scaled, linewidth=2)
+        plt.legend(['V [m/s]', '$\omega$ [rad/s]'], loc="best")
+        plt.grid(True)
+    else:
+        plt.text(0.5,0.5,"[Problem iv not completed]", horizontalalignment='center', verticalalignment='center', transform=plt.gca().transAxes)
+    plt.xlabel('Time [s]')
+    plt.title('Scaled Control Input')
+    plt.tight_layout()
 
-    # plt.subplot(2, 2, 3)
-    # if part_b_complete:
-        # h, = plt.plot(t, s, 'b-', linewidth=2)
-        # handles = [h]
-        # labels = ["Original"]
-        # h, = plt.plot(tau, s, 'r-', linewidth=2)
-        # handles.append(h)
-        # labels.append("Scaled")
-        # plt.legend(handles, labels, loc="best")
-    # else:
-        # plt.text(0.5,0.5,"[Problem iv not completed]", horizontalalignment='center', verticalalignment='center', transform=plt.gca().transAxes)
-    # plt.grid(True)
-    # plt.xlabel('Time [s]')
-    # plt.ylabel('Arc-length [m]')
-    # plt.title('Original and scaled arc-length')
-    # plt.tight_layout()
-    # plt.savefig("plots/differential_flatness.png")
-    # plt.show()
+    plt.subplot(2, 2, 3)
+    if part_b_complete:
+        h, = plt.plot(t, s, 'b-', linewidth=2)
+        handles = [h]
+        labels = ["Original"]
+        h, = plt.plot(tau, s, 'r-', linewidth=2)
+        handles.append(h)
+        labels.append("Scaled")
+        plt.legend(handles, labels, loc="best")
+    else:
+        plt.text(0.5,0.5,"[Problem iv not completed]", horizontalalignment='center', verticalalignment='center', transform=plt.gca().transAxes)
+    plt.grid(True)
+    plt.xlabel('Time [s]')
+    plt.ylabel('Arc-length [m]')
+    plt.title('Original and scaled arc-length')
+    plt.tight_layout()
+    plt.savefig("plots/differential_flatness.png")
+    plt.show()
