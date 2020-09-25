@@ -80,7 +80,7 @@ def compute_traj(coeffs, tf, N):
     traj[:,1] = y1 + y2 * t + y3 * t**2 + y4 * t**3 #y
     traj[:,3] = x2 + x3 * 2 * t + x4 * 3 * t**2    #xdot
     traj[:,4] = y2 + y3 * 2 * t + y4 * 3 * t**2    #ydot
-    V = sqrt(traj[:,3]**2 + traj[:,4]**2)
+    V = np.sqrt(traj[:,3]**2 + traj[:,4]**2)
     traj[:,2] = np.arctan2(traj[:,4], traj[:,3] * V)
     traj[:,5] = x3 * 2 + x4 * 6 * t
     traj[:,6] = y3 * 2 + y4 * 6 * t
