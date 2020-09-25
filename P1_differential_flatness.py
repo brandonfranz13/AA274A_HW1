@@ -38,12 +38,12 @@ def compute_traj_coeffs(initial_state, final_state, tf):
     A = [ 
          [1, 0, 0, 0, 0, 0, 0, 0],
          [0, 0, 0, 0, 1, 0, 0, 0],
-		 [1, tf, tf^2, tf^3, 0, 0, 0, 0],
-		 [0, 0, 0, 0, 1, tf, tf^2, tf^3],
+		 [1, tf, tf**2, tf**3, 0, 0, 0, 0],
+		 [0, 0, 0, 0, 1, tf, tf**2, tf**3],
 		 [0, 1, 0, 0, 0, 0, 0, 0,],
 		 [0, 0, 0, 0, 1, 0, 0, 0],
-		 [0, 1, 2*tf, 3*tf^2, 0, 0, 0, 0],
-		 [0, 0, 0, 0, 0, 1, 2*tf, 3*tf^2]
+		 [0, 1, 2*tf, 3*tf**2, 0, 0, 0, 0],
+		 [0, 0, 0, 0, 0, 1, 2*tf, 3*tf**2]
         ]
     
     b = np.transpose(
@@ -78,11 +78,11 @@ def compute_traj(coeffs, tf, N):
     ########## Code starts here ##########
     
     x1, x2, x3, x4, y1, y2, y3, y4 = coeffs
-    traj[:,0] = x1 + x2 * t + x3 * t^2 + x4 * t^3 #x
-    traj[:,1] = y1 + y2 * t + y3 * t^2 + y4 * t^3 #y
-    traj[:,3] = x2 + x3 * 2 * t + x4 * 3 * t^2    #xdot
-    traj[:,4] = y2 + y3 * 2 * t + y4 * 3 * t^2    #ydot
-    V = sqrt(traj[:,3]^2 + traj[:,4]^2)
+    traj[:,0] = x1 + x2 * t + x3 * t**2 + x4 * t**3 #x
+    traj[:,1] = y1 + y2 * t + y3 * t**2 + y4 * t**3 #y
+    traj[:,3] = x2 + x3 * 2 * t + x4 * 3 * t**2    #xdot
+    traj[:,4] = y2 + y3 * 2 * t + y4 * 3 * t**2    #ydot
+    V = sqrt(traj[:,3]**2 + traj[:,4]**2)
     traj[:,2] = np.arctan2(traj[:,4], traj[:,3] * V)
     traj[:,5] = x3 * 2 + x4 * 6 * t
     traj[:,6] = y3 * 2 + y4 * 6 * t
