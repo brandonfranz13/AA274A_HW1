@@ -57,7 +57,8 @@ def compute_traj_coeffs(initial_state, final_state, tf):
          final_state.xd,
          final_state.yd
         ])
-         
+    print(A)
+    print(b)    
     coeffs = np.linalg.solve(A, b)           
     
     ########## Code ends here ##########
