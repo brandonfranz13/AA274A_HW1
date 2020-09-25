@@ -277,42 +277,42 @@ if __name__ == "__main__":
     plt.title("Path (position)")
     plt.axis([-1, 6, -1, 6])
 
-    ax = plt.subplot(2, 2, 2)
-    plt.plot(t, V, linewidth=2)
-    plt.plot(t, om, linewidth=2)
-    plt.grid(True)
-    plt.xlabel('Time [s]')
-    plt.legend(['V [m/s]', '$\omega$ [rad/s]'], loc="best")
-    plt.title('Original Control Input')
-    plt.tight_layout()
+    # ax = plt.subplot(2, 2, 2)
+    # plt.plot(t, V, linewidth=2)
+    # plt.plot(t, om, linewidth=2)
+    # plt.grid(True)
+    # plt.xlabel('Time [s]')
+    # plt.legend(['V [m/s]', '$\omega$ [rad/s]'], loc="best")
+    # plt.title('Original Control Input')
+    # plt.tight_layout()
 
-    plt.subplot(2, 2, 4, sharex=ax)
-    if part_b_complete:
-        plt.plot(t_new, V_scaled, linewidth=2)
-        plt.plot(t_new, om_scaled, linewidth=2)
-        plt.legend(['V [m/s]', '$\omega$ [rad/s]'], loc="best")
-        plt.grid(True)
-    else:
-        plt.text(0.5,0.5,"[Problem iv not completed]", horizontalalignment='center', verticalalignment='center', transform=plt.gca().transAxes)
-    plt.xlabel('Time [s]')
-    plt.title('Scaled Control Input')
-    plt.tight_layout()
+    # plt.subplot(2, 2, 4, sharex=ax)
+    # if part_b_complete:
+        # plt.plot(t_new, V_scaled, linewidth=2)
+        # plt.plot(t_new, om_scaled, linewidth=2)
+        # plt.legend(['V [m/s]', '$\omega$ [rad/s]'], loc="best")
+        # plt.grid(True)
+    # else:
+        # plt.text(0.5,0.5,"[Problem iv not completed]", horizontalalignment='center', verticalalignment='center', transform=plt.gca().transAxes)
+    # plt.xlabel('Time [s]')
+    # plt.title('Scaled Control Input')
+    # plt.tight_layout()
 
-    plt.subplot(2, 2, 3)
-    if part_b_complete:
-        h, = plt.plot(t, s, 'b-', linewidth=2)
-        handles = [h]
-        labels = ["Original"]
-        h, = plt.plot(tau, s, 'r-', linewidth=2)
-        handles.append(h)
-        labels.append("Scaled")
-        plt.legend(handles, labels, loc="best")
-    else:
-        plt.text(0.5,0.5,"[Problem iv not completed]", horizontalalignment='center', verticalalignment='center', transform=plt.gca().transAxes)
-    plt.grid(True)
-    plt.xlabel('Time [s]')
-    plt.ylabel('Arc-length [m]')
-    plt.title('Original and scaled arc-length')
-    plt.tight_layout()
-    plt.savefig("plots/differential_flatness.png")
-    plt.show()
+    # plt.subplot(2, 2, 3)
+    # if part_b_complete:
+        # h, = plt.plot(t, s, 'b-', linewidth=2)
+        # handles = [h]
+        # labels = ["Original"]
+        # h, = plt.plot(tau, s, 'r-', linewidth=2)
+        # handles.append(h)
+        # labels.append("Scaled")
+        # plt.legend(handles, labels, loc="best")
+    # else:
+        # plt.text(0.5,0.5,"[Problem iv not completed]", horizontalalignment='center', verticalalignment='center', transform=plt.gca().transAxes)
+    # plt.grid(True)
+    # plt.xlabel('Time [s]')
+    # plt.ylabel('Arc-length [m]')
+    # plt.title('Original and scaled arc-length')
+    # plt.tight_layout()
+    # plt.savefig("plots/differential_flatness.png")
+    # plt.show()
