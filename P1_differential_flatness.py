@@ -34,10 +34,6 @@ def compute_traj_coeffs(initial_state, final_state, tf):
     """
     ########## Code starts here ##########
     
-    coeffs = np.array(8)
-    A = np.array(8,8)
-    b = np.array(8)
-    
     A = [ 
          [1, 0, 0, 0, 0, 0, 0, 0],
          [0, 0, 0, 0, 1, 0, 0, 0],
@@ -50,18 +46,16 @@ def compute_traj_coeffs(initial_state, final_state, tf):
         ]
     
     b = [
-         initial_state.x,
-         initial_state.y,
-         final_state.x,
-         final_state.y,
-         initial_state.xd,
-         initial_state.yd,
-         final_state.xd,
-         final_state.yd
+         [initial_state.x],
+         [initial_state.y],
+         [final_state.x],
+         [final_state.y],
+         [initial_state.xd],
+         [initial_state.yd],
+         [final_state.xd],
+         [final_state.yd]
         ]
-    b.reshape(-1,1)
-    print(A)
-    print(b)    
+        
     coeffs = np.linalg.solve(A, b)           
     
     ########## Code ends here ##########
