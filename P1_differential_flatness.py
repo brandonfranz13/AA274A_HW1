@@ -35,6 +35,9 @@ def compute_traj_coeffs(initial_state, final_state, tf):
     ########## Code starts here ##########
     
     coeffs = np.array(8)
+    A = np.array(8,8)
+    b = np.array(8)
+    
     A = [ 
          [1, 0, 0, 0, 0, 0, 0, 0],
          [0, 0, 0, 0, 1, 0, 0, 0],
