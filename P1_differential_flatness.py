@@ -36,14 +36,14 @@ def compute_traj_coeffs(initial_state, final_state, tf):
     
     coeffs = np.array()
     A = [ 
-         [1 0 0 0 0 0 0 0];
-         [0 0 0 0 1 0 0 0];
-		 [1 tf tf^2 tf^3 0 0 0 0];
-		 [0 0 0 0 1 tf tf^2 tf^3];
-		 [0 1 0 0 0 0 0 0];
-		 [0 0 0 0 1 0 0 0];
-		 [0 1 2*tf 3*tf^2 0 0 0 0];
-		 [0 0 0 0 2*tf 3*tf^2]
+         [1, 0, 0, 0, 0, 0, 0, 0];
+         [0, 0, 0, 0, 1, 0, 0, 0];
+		 [1, tf, tf^2, tf^3, 0, 0, 0, 0];
+		 [0, 0, 0, 0, 1, tf, tf^2, tf^3];
+		 [0, 1, 0, 0, 0, 0, 0, 0,];
+		 [0, 0, 0, 0, 1, 0, 0, 0];
+		 [0, 1, 2*tf, 3*tf^2, 0, 0, 0, 0];
+		 [0, 0, 0, 0, 0, 1, 2*tf, 3*tf^2]
         ]
     
     b = [
@@ -248,23 +248,23 @@ if __name__ == "__main__":
 
     coeffs = compute_traj_coeffs(initial_state=s_0, final_state=s_f, tf=tf)
     t, traj = compute_traj(coeffs=coeffs, tf=tf, N=N)
-    V,om = compute_controls(traj=traj)
+    # V,om = compute_controls(traj=traj)
 
-    part_b_complete = False
-    s = compute_arc_length(V, t)
-    if s is not None:
-        part_b_complete = True
-        V_tilde = rescale_V(V, om, V_max, om_max)
-        tau = compute_tau(V_tilde, s)
-        om_tilde = rescale_om(V, om, V_tilde)
+    # part_b_complete = False
+    # s = compute_arc_length(V, t)
+    # if s is not None:
+        # part_b_complete = True
+        # V_tilde = rescale_V(V, om, V_max, om_max)
+        # tau = compute_tau(V_tilde, s)
+        # om_tilde = rescale_om(V, om, V_tilde)
 
-        t_new, V_scaled, om_scaled, traj_scaled = interpolate_traj(traj, tau, V_tilde, om_tilde, dt, s_f)
+        # t_new, V_scaled, om_scaled, traj_scaled = interpolate_traj(traj, tau, V_tilde, om_tilde, dt, s_f)
 
-        # Save trajectory data
-        data = {'z': traj_scaled, 'V': V_scaled, 'om': om_scaled}
-        save_dict(data, "data/differential_flatness.pkl")
+        # # Save trajectory data
+        # data = {'z': traj_scaled, 'V': V_scaled, 'om': om_scaled}
+        # save_dict(data, "data/differential_flatness.pkl")
 
-    maybe_makedirs('plots')
+    # maybe_makedirs('plots')
 
     # Plots
     plt.figure(figsize=(15, 7))
