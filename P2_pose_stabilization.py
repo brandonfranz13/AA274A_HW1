@@ -35,6 +35,13 @@ class PoseController:
         """
         ########## Code starts here ##########
         
+        delta = wrapToPi(np.arctan2( (y-self.y_g),  (x-self.x_g) ) - self.th_g - np.pi)
+        alpha = wrapToPi(self.th_g + delta - th)
+        rho = np.sqrt( (x-self.x_g)**2 + (y-self.y_g)**2 )
+                
+        V = self.k1 * rho * np.cos(alpha)
+        om = self.k2 + self.k1 * (np.sinc(alpha) * np.cos(alpha)) * (alpha + self.k3 * delta)
+        
         ########## Code ends here ##########
 
         # apply control limits

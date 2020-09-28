@@ -99,9 +99,9 @@ def compute_controls(traj):
     """
     ########## Code starts here ##########
     V = np.sqrt(traj[:,3]**2 + traj[:,4]**2)
-    Vdot = (traj[:,3] + traj[:,4]) / np.sqrt(traj[:,3]**2 + traj[:,4]**2)
-    x = traj[:,4] / (traj[:,3] * V)
-    dxdt = ( (traj[:,6] * traj[:,3] * V) - (traj[:,4] * V * traj[:,5]) - (traj[:,4] * traj[:,3] * Vdot) ) / (traj[:,3]**2 * V**2)
+    Vdot = (traj[:,3] * traj[:,5] + traj[:,4]*traj[:,6]) / np.sqrt(traj[:,3]**2 + traj[:,4]**2)
+    x = traj[:,4] / traj[:,3]
+    dxdt = traj[:,6] / traj[:,3] - traj[:,4] * traj[:,5] / traj[:,3]**2
     om = 1 / (1 + (x) ** 2) * dxdt
     ########## Code ends here ##########
 
@@ -121,7 +121,7 @@ def compute_arc_length(V, t):
     """
     s = None
     ########## Code starts here ##########
-    
+    s = cumtrapz(V, t, initial=V[0])
     ########## Code ends here ##########
     return s
 
@@ -143,6 +143,8 @@ def rescale_V(V, om, V_max, om_max):
     """
     ########## Code starts here ##########
     
+    V = [V_max for v in V if (V/om) > (V_max/om_max)]
+    
     ########## Code ends here ##########
     return V_tilde
 
@@ -160,6 +162,8 @@ def compute_tau(V_tilde, s):
     """
     ########## Code starts here ##########
     
+    tau = cumtrapz(1/V_tilde, s, initial=s[0])
+    
     ########## Code ends here ##########
     return tau
 
@@ -176,6 +180,8 @@ def rescale_om(V, om, V_tilde):
     Hint: This should take one line.
     """
     ########## Code starts here ##########
+    
+    om_tilde = om * 1/V * V_tilde
     
     ########## Code ends here ##########
     return om_tilde
