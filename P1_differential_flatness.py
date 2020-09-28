@@ -121,7 +121,7 @@ def compute_arc_length(V, t):
     """
     s = None
     ########## Code starts here ##########
-    s = cumtrapz(V, t, initial=V[0])
+    s = cumtrapz(V, t, initial=0)
     ########## Code ends here ##########
     return s
 
@@ -143,8 +143,23 @@ def rescale_V(V, om, V_max, om_max):
     """
     ########## Code starts here ##########
     
-    V = [V_max for v in V if (V/om) > (V_max/om_max)]
+    #V_tilde = [V_max for v in V for o in om if np.any((o/v)  > (om_max / V_max)]
+    #V_tilde = np.any(V > om_max * V_max / om)
+    #V_tilde = [V_max for i in range(len(V)) if V[i] > V_max * om_max / om[i]]
+    #V_tilde = np.where((V < V_max) & (1/V < abs(om / (V * om_max))), V*om_max/om, V_max)
+    # V_tilde = np.where(om == 0, V_max, [V_max for v in V if abs(V[i] / om[i]) < abs(V_max / om_max)
     
+    #V_tilde = np.where((abs(V) > V_max) | (abs(V) > abs(om_max * V / om)) | (om == 0), V_max, V)
+    V_tilde = np.zeros(len(V))
+    for i in range(len(V)):
+        if (abs(V[i]) > V_max) | (om[i] == 0):
+            V_tilde[i] = V_max
+        elif (1/abs(V[i]) < abs(om[i] / (om_max * V[i]))):
+            V_tilde[i] = V[i] * om_max / om[i]
+        else:
+            V_tilde[i] = V[i]       
+    
+        
     ########## Code ends here ##########
     return V_tilde
 
@@ -162,7 +177,7 @@ def compute_tau(V_tilde, s):
     """
     ########## Code starts here ##########
     
-    tau = cumtrapz(1/V_tilde, s, initial=s[0])
+    tau = cumtrapz(1/V_tilde, s, initial=0)
     
     ########## Code ends here ##########
     return tau
@@ -181,7 +196,7 @@ def rescale_om(V, om, V_tilde):
     """
     ########## Code starts here ##########
     
-    om_tilde = om * 1/V * V_tilde
+    om_tilde = om * V_tilde / V
     
     ########## Code ends here ##########
     return om_tilde
