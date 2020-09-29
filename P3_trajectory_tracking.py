@@ -59,7 +59,7 @@ class TrajectoryTracker:
 
         ########## Code starts here ##########
         
-        if self.V_prev < V_PREV_THRES:
+        if self.V_prev <= V_PREV_THRES:
             self.V_prev = np.sqrt(xd_d**2 + yd_d**2)
         
         u = [[xdd_d + self.kpx * (x_d - x) + self.kdx * (xd_d - self.V_prev*np.cos(th))],
@@ -68,8 +68,8 @@ class TrajectoryTracker:
         J = [[np.cos(th), -self.V_prev * np.sin(th)],
              [np.sin(th), self.V_prev * np.cos(th)]]
         
-        [a, om] = linalg.solve(J, u)
-        V = (xd_d * xdd_d + yd_d * ydd_d) / a
+        [[a], [om]] = linalg.solve(J, u)
+        V = abs((xd_d * xdd_d + yd_d * ydd_d) / a)
         
          
         

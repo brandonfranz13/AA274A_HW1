@@ -50,10 +50,10 @@ def compute_traj_coeffs(initial_state, final_state, tf):
          [initial_state.y],
          [final_state.x],
          [final_state.y],
-         [initial_state.xd],
-         [initial_state.yd],
-         [final_state.xd],
-         [final_state.yd]
+         [initial_state.V*np.cos(initial_state.th)],
+         [initial_state.V*np.sin(initial_state.th)],
+         [final_state.V*np.cos(final_state.th)],
+         [final_state.V*np.sin(final_state.th)]
         ]
         
     coeffs = np.linalg.solve(A, b)           
@@ -80,8 +80,7 @@ def compute_traj(coeffs, tf, N):
     traj[:,1] = y1 + y2 * t + y3 * t**2 + y4 * t**3  #y
     traj[:,3] = x2 + x3 * 2 * t + x4 * 3 * t**2      #xdot
     traj[:,4] = y2 + y3 * 2 * t + y4 * 3 * t**2      #ydot
-    V = np.sqrt(traj[:,3]**2 + traj[:,4]**2)
-    traj[:,2] = np.arctan2(traj[:,4], traj[:,3] * V) #theta
+    traj[:,2] = np.arctan2(traj[:,4], traj[:,3])     #theta
     traj[:,5] = x3 * 2 + x4 * 6 * t                  #xddot
     traj[:,6] = y3 * 2 + y4 * 6 * t                  #yddot   
     
@@ -99,7 +98,6 @@ def compute_controls(traj):
     """
     ########## Code starts here ##########
     V = np.sqrt(traj[:,3]**2 + traj[:,4]**2)
-    Vdot = (traj[:,3] * traj[:,5] + traj[:,4]*traj[:,6]) / np.sqrt(traj[:,3]**2 + traj[:,4]**2)
     x = traj[:,4] / traj[:,3]
     dxdt = traj[:,6] / traj[:,3] - traj[:,4] * traj[:,5] / traj[:,3]**2
     om = 1 / (1 + (x) ** 2) * dxdt
@@ -143,23 +141,15 @@ def rescale_V(V, om, V_max, om_max):
     """
     ########## Code starts here ##########
     
-    #V_tilde = [V_max for v in V for o in om if np.any((o/v)  > (om_max / V_max)]
-    #V_tilde = np.any(V > om_max * V_max / om)
-    #V_tilde = [V_max for i in range(len(V)) if V[i] > V_max * om_max / om[i]]
-    #V_tilde = np.where((V < V_max) & (1/V < abs(om / (V * om_max))), V*om_max/om, V_max)
-    # V_tilde = np.where(om == 0, V_max, [V_max for v in V if abs(V[i] / om[i]) < abs(V_max / om_max)
-    
-    #V_tilde = np.where((abs(V) > V_max) | (abs(V) > abs(om_max * V / om)) | (om == 0), V_max, V)
-    V_tilde = np.zeros(len(V))
+    V_tilde = np.ones(len(V))
     for i in range(len(V)):
         if (abs(V[i]) > V_max) | (om[i] == 0):
             V_tilde[i] = V_max
         elif (1/abs(V[i]) < abs(om[i] / (om_max * V[i]))):
-            V_tilde[i] = V[i] * om_max / om[i]
+            V_tilde[i] = abs(V[i] * om_max / om[i])
         else:
             V_tilde[i] = V[i]       
-    
-        
+            
     ########## Code ends here ##########
     return V_tilde
 

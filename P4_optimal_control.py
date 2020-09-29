@@ -16,7 +16,8 @@ def ode_fun(tau, z):
         dz: the state derivative vector. Returns a numpy array.
     """
     ########## Code starts here ##########
-
+    # zd = 
+    # dz = zd * dt
     ########## Code ends here ##########
     return dz
 
@@ -96,6 +97,17 @@ def main():
     """
     ########## Code starts here ##########
 
+    # #Problem Inputs
+    # num_ODE =
+    # num_parameters = 
+    # num_left_boundary_conditions =
+    # boundary_points =
+    # function =
+    # boundary_conditions =
+    
+    # #Initial Guess
+    # initial_guess =
+    
     ########## Code ends here ##########
 
     problem_inputs = {
