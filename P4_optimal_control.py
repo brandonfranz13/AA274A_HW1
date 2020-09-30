@@ -16,8 +16,18 @@ def ode_fun(tau, z):
         dz: the state derivative vector. Returns a numpy array.
     """
     ########## Code starts here ##########
-    # zd = 
-    # dz = zd * dt
+    V = -(z[3] * np.cos(z[2]) + z[4] * np.sin(z[2])) / 2
+    om = - z[5] / 2
+    xd = V * np.cos(z[2]) * z[6]
+    yd = V * np.sin(z[2]) * z[6]
+    thd = om * z[6]
+    p1d = 0
+    p2d = 0
+    p3d = (z[3] * V * np.sin(z[2]) - z[4] * V * np.cos(z[2])) * z[6]
+    rd = 0
+    
+      
+    dz = np.array([xd, yd, thd, p1d, p2d, p3d, rd])
     ########## Code ends here ##########
     return dz
 
@@ -41,7 +51,13 @@ def bc_fun(za, zb):
     x0 = [0, 0, -np.pi/2.0]
 
     ########## Code starts here ##########
-
+    bca = np.array([za[0] - x0[0], za[1] - x0[1], za[2] - x0[2]])
+    lam = 1
+    V = - ( zb[3]*np.cos(zb[2]) + zb[4]*np.sin(zb[2]) ) / 2
+    om = - zb[5] / 2
+    Hf = lam + V**2 + om**2 + zb[3]*V*np.cos(zb[2]) + zb[4]*V*np.sin(zb[2]) + zb[5]*om
+    
+    bcb = np.array([zb[0] - xf[0], zb[1] - xf[1], zb[2] - xf[2], Hf])
     ########## Code ends here ##########
     return (bca, bcb)
 
@@ -80,7 +96,10 @@ def compute_controls(z):
         om: angular rate control input
     """
     ########## Code starts here ##########
-
+    
+    V = -(z[:,3] * np.cos(z[:,2]) + z[:,4] * np.sin(z[:,2])) / 2
+    om = - z[:,5] / 2
+    
     ########## Code ends here ##########
 
     return V, om
@@ -97,16 +116,16 @@ def main():
     """
     ########## Code starts here ##########
 
-    # #Problem Inputs
-    # num_ODE =
-    # num_parameters = 
-    # num_left_boundary_conditions =
-    # boundary_points =
-    # function =
-    # boundary_conditions =
+    #Problem Inputs
+    num_ODE = 7
+    num_parameters = 0
+    num_left_boundary_conditions = 3
+    boundary_points = (0, 25)
+    function = ode_fun
+    boundary_conditions = bc_fun
     
     # #Initial Guess
-    # initial_guess =
+    initial_guess = (2.5, 2.5, -np.pi/2.0, -2.0, -2.0, 0.5, 20)
     
     ########## Code ends here ##########
 
