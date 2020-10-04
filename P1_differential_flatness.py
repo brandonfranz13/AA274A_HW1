@@ -39,7 +39,7 @@ def compute_traj_coeffs(initial_state, final_state, tf):
          [0, 0, 0, 0, 1, 0, 0, 0],
 		 [1, tf, tf**2, tf**3, 0, 0, 0, 0],
 		 [0, 0, 0, 0, 1, tf, tf**2, tf**3],
-		 [0, 1, 0, 0, 0, 0, 0, 0,],
+		 [0, 1, 0, 0, 0, 0, 0, 0],
 		 [0, 0, 0, 0, 0, 1, 0, 0],
 		 [0, 1, 2*tf, 3*tf**2, 0, 0, 0, 0],
 		 [0, 0, 0, 0, 0, 1, 2*tf, 3*tf**2]
@@ -50,10 +50,10 @@ def compute_traj_coeffs(initial_state, final_state, tf):
          [initial_state.y],
          [final_state.x],
          [final_state.y],
-         [initial_state.V*np.cos(initial_state.th)],
-         [initial_state.V*np.sin(initial_state.th)],
-         [final_state.V*np.cos(final_state.th)],
-         [final_state.V*np.sin(final_state.th)]
+         [initial_state.xd],
+         [initial_state.yd],
+         [final_state.xd],
+         [final_state.yd]
         ]
         
     coeffs = np.linalg.solve(A, b)           

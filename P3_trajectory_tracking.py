@@ -69,7 +69,7 @@ class TrajectoryTracker:
              [np.sin(th), self.V_prev * np.cos(th)]]
         
         [[a], [om]] = linalg.solve(J, u)
-        V = abs((xd_d * xdd_d + yd_d * ydd_d) / a)
+        V = self.V_prev + a*dt
         
          
         
